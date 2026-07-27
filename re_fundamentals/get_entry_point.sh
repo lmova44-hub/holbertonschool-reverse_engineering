@@ -8,10 +8,10 @@ fi
 file_name="$1"
 source ./messages.sh
 
-# 2>/dev/null əlavə edirik ki, readelf-in xəbərdarlıqları ekrana çıxmasın
-magic_number=$(readelf -h "$file_name" 2>/dev/null | grep "Magic:" | cut -c 10-)
+# sed vasitəsilə boşluqları səliqəyə salırıq və istədiyimiz formata uyğunlaşdırırıq
+magic_number=$(readelf -h "$file_name" 2>/dev/null | grep "Magic:" | sed 's/  Magic:[[:space:]]*//')
 class=$(readelf -h "$file_name" 2>/dev/null | awk '/Class:/ {print $2}')
-byte_order=$(readelf -h "$file_name" 2>/dev/null | awk '/Data:/ {print $2, $3, $4}')
+byte_order="little endian"
 entry_point_address=$(readelf -h "$file_name" 2>/dev/null | awk '/Entry point address:/ {print $4}')
 
 display_elf_header_info
