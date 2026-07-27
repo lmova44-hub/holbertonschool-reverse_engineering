@@ -8,8 +8,7 @@ fi
 file_name="$1"
 source ./messages.sh
 
-# sed vasitəsilə boşluqları səliqəyə salırıq və istədiyimiz formata uyğunlaşdırırıq
-magic_number=$(readelf -h "$file_name" 2>/dev/null | grep "Magic:" | sed 's/  Magic:[[:space:]]*//')
+magic_number=$(readelf -h "$file_name" 2>/dev/null | grep "Magic:" | sed 's/.*Magic:[[:space:]]*//' | xargs)
 class=$(readelf -h "$file_name" 2>/dev/null | awk '/Class:/ {print $2}')
 byte_order="little endian"
 entry_point_address=$(readelf -h "$file_name" 2>/dev/null | awk '/Entry point address:/ {print $4}')
